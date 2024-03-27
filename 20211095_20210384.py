@@ -160,23 +160,30 @@ def eliminate_universal_quantifiers(expression):
 
     return new_exp
 
-expression = "∀x∀z(p(x) ∧ ~r(x,z)) -> ∃xq(x,a)"
-print("original expression:", expression)
 
-eliminated_expression = eliminate_implication(expression)
-print("eliminated expression:", eliminated_expression)
+def transform_expression(expression):
+    eliminated_expression = eliminate_implication(expression)
+    print("Eliminated Implication:", eliminated_expression)
 
-negated_expression = move_negation(eliminated_expression)
-print("negated expression:", negated_expression)
+    negated_expression = move_negation(eliminated_expression)
+    print("Negated Expression:", negated_expression)
 
-remove_not = remove_double_not(negated_expression)
-print("remove double not:", remove_not)
+    removed_not = remove_double_not(negated_expression)
+    print("Removed Double Negation:", removed_not)
 
-prenex_expression = prenex_form(remove_not)
-print("prenex form:", prenex_expression)
+    standardized_expression = standardize_variables(removed_not)
+    print("Standardized Variables:", standardized_expression)
 
-universal_expression = eliminate_universal_quantifiers(prenex_expression)
-print("eliminate universal quantifiers:", universal_expression)
+    prenex_expression = prenex_form(standardized_expression)
+    print("Prenex Form:", prenex_expression)
 
-standardize_expression= standardize_variables(expression)
-print(standardize_expression)
+    universal_expression = eliminate_universal_quantifiers(prenex_expression)
+    print("Eliminated Universal Quantifiers:", universal_expression)
+
+    return universal_expression
+
+expression = ["∀x∀z(p(x) ∧ ~r(x,z)) -> ∃xq(x)", "∀yq(y) -> ∃xq(x)"]
+for i in expression:
+    print("Original Expression:", i)
+    final = transform_expression(i)
+    print("Final Result:", final)
